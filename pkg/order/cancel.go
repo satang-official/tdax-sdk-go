@@ -1,8 +1,8 @@
 package order
 
 import (
-	"bitbucket.org/satangcorp/tdax-sdk/pkg/client"
-	"bitbucket.org/satangcorp/tdax-sdk/pkg/signature"
+	"github.com/satang-official/tdax-sdk-go/pkg/client"
+	"github.com/satang-official/tdax-sdk-go/pkg/signature"
 	resty "gopkg.in/resty.v1"
 )
 

@@ -5,12 +5,13 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"bitbucket.org/satangcorp/tdax-sdk/pkg/client"
-	"bitbucket.org/satangcorp/tdax-sdk/pkg/user"
-	"bitbucket.org/satangcorp/tdax-sdk/pkg/withdrawal"
+	"github.com/satang-official/tdax-sdk-go/pkg/client"
+	"github.com/satang-official/tdax-sdk-go/pkg/user"
+	"github.com/satang-official/tdax-sdk-go/pkg/withdrawal"
 )
 
 func main() {
+	key, secret, userID := "", "", ""
 
 	log.Info("Start")
 	log.Infof("Key: %s", key)
