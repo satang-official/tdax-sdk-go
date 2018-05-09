@@ -14,20 +14,17 @@ type Option struct {
 	Type   string
 	Symbol string
 	Market string
-	Price  string
-	Qty    string
+	Price  string `json:",omitempty"`
+	Qty    string `json:",omitempty"`
 	Side   string
 	Nonce  int64
 }
 
-const limit = "LIMIT"
-const sell = "sell"
-const buy = "buy"
-
+// NewLimitSell is Order construct helper
 func NewLimitSell(price, qty *big.Int, symbol, market string) Option {
 	return Option{
-		Type:   limit,
-		Side:   sell,
+		Type:   LimitType,
+		Side:   SellSide,
 		Nonce:  time.Now().Unix(),
 		Price:  price.String(),
 		Qty:    qty.String(),
@@ -36,10 +33,11 @@ func NewLimitSell(price, qty *big.Int, symbol, market string) Option {
 	}
 }
 
+// NewLimitBuy is Order construct helper
 func NewLimitBuy(price, qty *big.Int, symbol, market string) Option {
 	return Option{
-		Type:   limit,
-		Side:   buy,
+		Type:   LimitType,
+		Side:   BuySide,
 		Nonce:  time.Now().Unix(),
 		Price:  price.String(),
 		Qty:    qty.String(),
@@ -48,7 +46,33 @@ func NewLimitBuy(price, qty *big.Int, symbol, market string) Option {
 	}
 }
 
-func Create(c client.Client, option Option) (*resty.Response, error) {
+// NewMarketSell is Order construct helper
+func NewMarketSell(price, qty *big.Int, symbol, market string) Option {
+	return Option{
+		Type:   LimitType,
+		Side:   SellSide,
+		Nonce:  time.Now().Unix(),
+		Price:  "",
+		Qty:    qty.String(),
+		Symbol: symbol,
+		Market: market,
+	}
+}
+
+// NewMarketBuy is Order construct helper
+func NewMarketBuy(price, qty *big.Int, symbol, market string) Option {
+	return Option{
+		Type:   MarketType,
+		Side:   BuySide,
+		Nonce:  time.Now().Unix(),
+		Price:  price.String(),
+		Qty:    "",
+		Symbol: symbol,
+		Market: market,
+	}
+}
+
+func Create(c client.Client, option Option) (*Order, error) {
 	bb, err := json.Marshal(option)
 	if err != nil {
 		return nil, err
@@ -59,9 +83,13 @@ func Create(c client.Client, option Option) (*resty.Response, error) {
 
 	sig := signature.Sign(c.APISecret(), params)
 
-	return resty.R().
+	order := &Order{}
+
+	_, err = resty.R().
 		SetHeader("Authorization", c.APIKey()).
 		SetHeader("Signature", sig).
 		SetBody(option).
+		SetResult(order).
 		Post(c.URL() + resourceURL)
+	return order, err
 }

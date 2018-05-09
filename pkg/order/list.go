@@ -8,21 +8,41 @@ import (
 	resty "gopkg.in/resty.v1"
 )
 
-const resourceURL = "orders"
+type ListResp struct {
+	Count int
+	Items []Order
+}
 
-func List(c client.Client, symbol, market string) (*resty.Response, error) {
+func List(c client.Client, params ...string) (*ListResp, error) {
 	sig := signature.Sign(c.APISecret(), nil)
 
-	pair := fmt.Sprintf("%s_%s", symbol, market)
+	pair := ""
+	if len(params) == 2 {
+		pair = fmt.Sprintf("%s_%s", params[0], params[1])
+	}
 
-	return resty.R().
+	orders := ListResp{Count: -1}
+	req := resty.R().
 		SetHeader("Authorization", c.APIKey()).
 		SetHeader("Signature", sig).
 		SetQueryParams(map[string]string{
 			"Symbol": pair,
-			"Limit":  "20",
+			"Limit":  "50",
 			"Offset": "0",
 			"Status": "open",
-		}).
-		Get(c.URL() + resourceURL)
+		})
+
+	if pair == "" {
+		req.SetResult(&orders)
+	} else {
+		req.SetResult(&orders.Items)
+	}
+
+	_, err := req.Get(c.URL() + resourceURL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &orders, nil
 }
