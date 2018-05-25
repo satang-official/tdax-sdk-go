@@ -3,7 +3,7 @@ package signature
 import (
 	"encoding/hex"
 
-	"bitbucket.org/satangcorp/xsig"
+	"github.com/satang-official/tdax-sdk-go/pkg/xsig"
 )
 
 func Sign(secret string, payload map[string]interface{}) string {
