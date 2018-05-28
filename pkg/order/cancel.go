@@ -15,6 +15,5 @@ func Cancel(c client.Client, orderID int64) error {
 		SetHeader("Authorization", c.APIKey()).
 		SetHeader("Signature", sig).
 		Delete(fmt.Sprintf("%s/%s/%d", c.URL(), resourceURL, orderID))
-
 	return err
 }

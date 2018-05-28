@@ -3,7 +3,7 @@ package signature
 import (
 	"encoding/hex"
 
-	"bitbucket.org/satangcorp/xsig"
+	"github.com/satang-official/tdax-sdk-go/pkg/xsig"
 )
 
 func Sign(secret string, payload map[string]interface{}) string {
@@ -12,11 +12,3 @@ func Sign(secret string, payload map[string]interface{}) string {
 	hex.Encode(dst, sig)
 	return string(dst)
 }
-
-// "Market":      opt.Market,
-// "Nonce":       body.Nonce,
-// "Price":       body.Price,
-// "Qty":         body.Qty,
-// "Side":        "SELL",
-// "Symbol":      body.Symbol,
-// "Type":        "LIMIT",

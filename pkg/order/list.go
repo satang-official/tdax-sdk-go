@@ -39,10 +39,8 @@ func List(c client.Client, params ...string) (*ListResp, error) {
 	}
 
 	_, err := req.Get(c.URL() + resourceURL)
-
 	if err != nil {
 		return nil, err
 	}
-
-	return &orders, nil
+	return &orders, err
 }
