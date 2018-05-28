@@ -6,7 +6,6 @@ import (
 	"github.com/satang-official/tdax-sdk-go/pkg/client"
 	"github.com/satang-official/tdax-sdk-go/pkg/signature"
 	resty "gopkg.in/resty.v1"
-	"github.com/satang-official/tdax-sdk-go/pkg/utils"
 )
 
 type ListResp struct {
@@ -39,11 +38,9 @@ func List(c client.Client, params ...string) (*ListResp, error) {
 		req.SetResult(&orders.Items)
 	}
 
-	resp, err := req.Get(c.URL() + resourceURL)
-
+	_, err := req.Get(c.URL() + resourceURL)
 	if err != nil {
-		return &orders, err
+		return nil, err
 	}
-	err = utils.HandleResponse(resp)
 	return &orders, err
 }
