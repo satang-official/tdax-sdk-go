@@ -8,7 +8,6 @@ import (
 	"github.com/satang-official/tdax-sdk-go/pkg/client"
 	"github.com/satang-official/tdax-sdk-go/pkg/signature"
 	resty "gopkg.in/resty.v1"
-	"github.com/satang-official/tdax-sdk-go/pkg/utils"
 )
 
 type Option struct {
@@ -86,15 +85,11 @@ func Create(c client.Client, option Option) (*Order, error) {
 
 	order := &Order{}
 
-	resp, err := resty.R().
+	_, err = resty.R().
 		SetHeader("Authorization", c.APIKey()).
 		SetHeader("Signature", sig).
 		SetBody(option).
 		SetResult(order).
 		Post(c.URL() + resourceURL)
-	if err != nil {
-		return order, err
-	}
-	err = utils.HandleResponse(resp)
 	return order, err
 }
