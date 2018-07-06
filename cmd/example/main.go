@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	// key, secret, userID := "", "", ""
+	key, secret, userID := "", "", ""
 
 	log.Infof("Key: %s", key)
 	log.Infof("Secret: %s", secret)
