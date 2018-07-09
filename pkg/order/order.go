@@ -23,10 +23,10 @@ type baseOrder struct {
 	Qty       json.Number
 	RemainQty json.Number
 	Cost      json.Number
-	Status    string
+	Status    int
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Side      string
+	Side      int
 	Type      int
 }
 
@@ -44,7 +44,7 @@ func (o *Order) UnmarshalJSON(b []byte) error {
 	}
 
 	o.baseOrder = tmpO
-	if tmpO.Side == "BuySide" {
+	if tmpO.Side == 0 {
 		o.Side = BuySide
 	} else {
 		o.Side = SellSide
